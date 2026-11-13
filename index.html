@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube AI Analytics Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">▶</div>
+      <div><strong>YouTube</strong><small>AI Analytics Studio</small></div>
+    </div>
+
+    <div class="menu-label">เมนูหลัก</div>
+    <nav>
+      <button class="nav-link active" data-page="dashboard">▦ ภาพรวม Dashboard</button>
+      <button class="nav-link" data-page="charts">▥ วิเคราะห์กราฟ</button>
+      <button class="nav-link" data-page="analysis">✦ AI วิเคราะห์ข้อมูล</button>
+      <button class="nav-link" data-page="chatbot">◉ AI Chatbot</button>
+      <button class="nav-link" data-page="datasets">▤ จัดการชุดข้อมูล</button>
+      <button class="nav-link" data-page="videos">▶ วิดีโอยอดนิยม</button>
+      <button class="nav-link" data-page="data">▧ สำรวจข้อมูล</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="status-dot"></div>
+      <span>ระบบพร้อมใช้งาน</span>
+      <small id="sidebarCount">0 รายการ</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">ภาพรวม Dashboard</h1>
+        <p>ระบบวิเคราะห์ข้อมูล YouTube อย่างชาญฉลาด</p>
+      </div>
+      <div class="top-actions">
+        <span class="dataset-chip" id="activeDatasetName">ยังไม่มีชุดข้อมูล</span>
+        <label class="upload-btn">
+          ＋ นำเข้า CSV
+          <input type="file" id="csvFile" accept=".csv" hidden>
+        </label>
+        <button class="btn btn-pdf" id="exportPDF">⇩ รายงาน PDF</button>
+      </div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="welcome">
+        <div>
+          <span class="eyebrow">YOUTUBE DATA INTELLIGENCE</span>
+          <h2>วิเคราะห์ข้อมูลของคุณ<br>ได้ง่ายในที่เดียว</h2>
+          <p>นำเข้าข้อมูล CSV เพื่อเริ่มต้นวิเคราะห์และค้นพบข้อมูลเชิงลึก</p>
+        </div>
+        <div class="welcome-icon">📊</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span>จำนวนรายการ</span><strong id="totalRecords">0</strong><small>Records</small></div>
+        <div class="stat-card"><span>จำนวนวิดีโอ</span><strong id="uniqueVideos">0</strong><small>Unique videos</small></div>
+        <div class="stat-card"><span>ยอดวิวรวม</span><strong id="totalViews">0</strong><small>Total views</small></div>
+        <div class="stat-card"><span>ยอดไลก์รวม</span><strong id="totalLikes">0</strong><small>Total likes</small></div>
+      </div>
+
+      <div class="section-heading">
+        <div><h3>ภาพรวมข้อมูล</h3><p>สรุปสถิติจากชุดข้อมูลที่กำลังใช้งาน</p></div>
+        <select id="countryFilter"><option value="">ทุกประเทศ</option></select>
+      </div>
+
+      <div class="chart-grid">
+        <div class="panel"><h3>ยอดวิวแยกตามประเทศ</h3><canvas id="countryChart"></canvas></div>
+        <div class="panel"><h3>ยอดวิวตามวันในสัปดาห์</h3><canvas id="weekdayChart"></canvas></div>
+        <div class="panel"><h3>ความสัมพันธ์การมีส่วนร่วม</h3><canvas id="engagementChart"></canvas></div>
+        <div class="panel"><h3>ช่องยอดนิยม</h3><canvas id="channelChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-charts">
+      <div class="section-heading">
+        <div><h2>Chart Studio</h2><p>เลือกตัวชี้วัดหลายรายการเพื่อเปรียบเทียบในกราฟเดียว</p></div>
+      </div>
+      <div class="panel">
+        <div class="form-grid">
+          <label>รูปแบบกราฟ
+            <select id="chartType">
+              <option value="bar">Bar Chart - กราฟแท่ง</option>
+              <option value="line">Line Chart - กราฟเส้น</option>
+              <option value="pie">Pie Chart - กราฟวงกลม</option>
+              <option value="doughnut">Doughnut - กราฟโดนัท</option>
+              <option value="radar">Radar - กราฟเรดาร์</option>
+            </select>
+          </label>
+          <label>จัดกลุ่มตาม
+            <select id="xAxis">
+              <option value="publish_country">ประเทศ</option>
+              <option value="channel_title">ช่อง YouTube</option>
+              <option value="published_day_of_week">วันในสัปดาห์</option>
+              <option value="time_frame">ช่วงเวลา</option>
+              <option value="category_id">หมวดหมู่</option>
+              <option value="publish_month">เดือน</option>
+            </select>
+          </label>
+          <label>จำนวนกลุ่มที่แสดง
+            <select id="chartLimit">
+              <option value="5">5 กลุ่ม</option>
+              <option value="10" selected>10 กลุ่ม</option>
+              <option value="15">15 กลุ่ม</option>
+              <option value="20">20 กลุ่ม</option>
+              <option value="30">30 กลุ่ม</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="metric-select">
+          <strong>เลือกตัวชี้วัดที่ต้องการเปรียบเทียบ</strong>
+          <div class="metric-options">
+            <label><input type="checkbox" name="metric" value="views" checked> Views</label>
+            <label><input type="checkbox" name="metric" value="likes" checked> Likes</label>
+            <label><input type="checkbox" name="metric" value="dislikes"> Dislikes</label>
+            <label><input type="checkbox" name="metric" value="comment_count"> Comments</label>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="generateChart">สร้างกราฟเปรียบเทียบ</button>
+        <div class="custom-chart-wrap"><canvas id="customChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-analysis">
+      <div class="section-heading">
+        <div><h2>AI Data Analysis</h2><p>วิเคราะห์แนวโน้มและสรุปข้อมูลจากชุดข้อมูลที่เลือก</p></div>
+        <button class="btn btn-primary" id="runAI">✦ วิเคราะห์ข้อมูล</button>
+      </div>
+      <div id="aiResults" class="analysis-grid">
+        <div class="empty-state">กดปุ่ม “วิเคราะห์ข้อมูล” เพื่อสร้างบทวิเคราะห์</div>
+      </div>
+      <div class="panel">
+        <h3>คำแนะนำจากระบบ</h3>
+        <div id="recommendations" class="recommendations">ยังไม่มีคำแนะนำ</div>
+      </div>
+    </section>
+
+    <section class="page" id="page-chatbot">
+      <div class="section-heading">
+        <div><h2>AI Data Chatbot</h2><p>พิมพ์คำถามเพื่อค้นหาคำตอบจากข้อมูล CSV</p></div>
+      </div>
+      <div class="chat-layout">
+        <div class="chat-header"><div class="bot-avatar">✦</div><div><strong>YouTube Data Assistant</strong><small>ผู้ช่วยตอบคำถามจากชุดข้อมูล</small></div><span class="online">● Online</span></div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot"><div class="bubble">สวัสดีครับ! ผมช่วยค้นหาคำตอบจากข้อมูล YouTube ของคุณได้ ลองถาม เช่น “ประเทศไหนมียอดวิวสูงที่สุด” หรือ “วิดีโอไหนมีไลก์สูงสุด”</div></div>
+        </div>
+        <div class="suggestions">
+          <button class="suggestion">ประเทศไหนมียอดวิวสูงที่สุด</button>
+          <button class="suggestion">วิดีโอไหนมีไลก์สูงสุด</button>
+          <button class="suggestion">ช่องไหนมียอดวิวสูงสุด</button>
+          <button class="suggestion">ยอดวิวรวมทั้งหมดเท่าไหร่</button>
+        </div>
+        <form id="chatForm" class="chat-input">
+          <input id="chatInput" placeholder="พิมพ์คำถามเกี่ยวกับข้อมูลของคุณ..." autocomplete="off">
+          <button class="btn btn-primary" type="submit">ส่ง ➤</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="page-datasets">
+      <div class="section-heading">
+        <div><h2>จัดการชุดข้อมูล</h2><p>เก็บข้อมูลหลายชุดและสลับกลับไปใช้ข้อมูลเดิมได้</p></div>
+        <label class="upload-btn">＋ เพิ่มชุดข้อมูลใหม่<input type="file" id="newDatasetFile" accept=".csv" hidden></label>
+      </div>
+      <div class="info-banner">ข้อมูลจะถูกจัดเก็บในเบราว์เซอร์นี้ด้วย IndexedDB โดยแต่ละชุดจะแยกจากกันและไม่เขียนทับชุดเดิม</div>
+      <div id="datasetList" class="dataset-list"></div>
+    </section>
+
+    <section class="page" id="page-videos">
+      <div class="section-heading"><div><h2>วิดีโอยอดนิยม</h2><p>จัดอันดับวิดีโอตามยอดวิว</p></div></div>
+      <div class="panel table-panel">
+        <input class="search-input" id="videoSearch" placeholder="ค้นหาชื่อวิดีโอหรือช่อง...">
+        <div class="table-wrap"><table><thead><tr><th>#</th><th>ชื่อวิดีโอ</th><th>ช่อง</th><th>ประเทศ</th><th>Views</th><th>Likes</th><th>Comments</th></tr></thead><tbody id="videoTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-data">
+      <div class="section-heading"><div><h2>Data Explorer</h2><p>ตรวจสอบข้อมูลทั้งหมดจากไฟล์ CSV</p></div></div>
+      <div class="panel table-panel">
+        <input class="search-input" id="dataSearch" placeholder="ค้นหาข้อมูล...">
+        <div class="table-wrap"><table><thead id="dataHead"></thead><tbody id="dataTable"></tbody></table></div>
+        <div class="pagination"><button class="btn btn-light" id="prevPage">ก่อนหน้า</button><span id="pageInfo">หน้า 0 / 0</span><button class="btn btn-light" id="nextPage">ถัดไป</button></div>
+      </div>
+    </section>
+
+    <footer> YouTube AI Analytics Studio · Data-driven insights</footer>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
